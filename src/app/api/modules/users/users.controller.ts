@@ -1,14 +1,20 @@
-import * as Router from 'koa-router';
+import * as Router from 'koa-joi-router';
 import { DbContext } from '@app/app.type';
 import { User } from '@src/database/entity/user.entity';
 import {UserRepository} from "@src/database/repositories/user.repository";
-const routerOpts: Router.IRouterOptions = {
-    prefix: '/users',
-};
+const Joi = Router.Joi;
 
-const router: Router = new Router(routerOpts);
+const router = Router();
 
-router.get('/', async (ctx: DbContext) => {
+router.prefix('/users');
+
+router.get('/', {
+    validate: {
+        query: {
+            name: Joi.string().optional()
+        }
+    }
+}, async (ctx: DbContext) => {
     const userRepository: UserRepository = ctx.db.getCustomRepository(UserRepository);
     let result = [];
 
@@ -23,6 +29,7 @@ router.get('/', async (ctx: DbContext) => {
         count: result[1],
     };
 });
+
 
 router.get('/:id', async (ctx: DbContext) => {
     const userRepository = ctx.db.getRepository(User);

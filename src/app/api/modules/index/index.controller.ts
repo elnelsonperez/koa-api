@@ -1,11 +1,7 @@
 import { Context } from 'koa';
-import * as Router from 'koa-router';
+import * as Router from 'koa-joi-router';
 
-const routerOpts: Router.IRouterOptions = {
-    prefix: '/',
-};
-
-const router: Router = new Router(routerOpts);
+const router = Router();
 
 router.get('/', async (ctx: Context) => {
     ctx.body = 'Koa API!';

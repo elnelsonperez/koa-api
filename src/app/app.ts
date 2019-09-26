@@ -20,9 +20,18 @@ app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
     try {
         await next();
     } catch (error) {
+        if (error.isJoi) {
+            ctx.body = {
+                message: 'Validation Error',
+                details: error.details
+            };
+        } else {
+            ctx.body = {error}
+        }
+
         ctx.status = error.statusCode || error.status || HttpStatus.INTERNAL_SERVER_ERROR;
         error.status = ctx.status;
-        ctx.body = { error };
+
         ctx.app.emit('error', error, ctx);
     }
 });
@@ -33,10 +42,7 @@ app.on('error', console.error);
 app.use(bodyParser());
 
 // Route Middleware
-app.use(IndexController.routes());
-app.use(IndexController.allowedMethods());
-
-app.use(UsersController.routes());
-app.use(UsersController.allowedMethods());
+app.use(IndexController.middleware());
+app.use(UsersController.middleware());
 
 export default app;
