@@ -2,17 +2,17 @@ import * as Koa from 'koa';
 import * as HttpStatus from 'http-status-codes';
 import * as logger from 'koa-logger';
 import * as bodyParser from 'koa-bodyparser';
+import { areWeTestingWithJest } from '../helpers';
 
 // Controllers
-import IndexController from './api/modules/index/index.controller';
-import { areWeTestingWithJest } from '../helpers';
+import IndexController from '@app/api/modules/index/index.controller';
+import UsersController from '@app/api/modules/users/users.controller';
 
 const app:Koa = new Koa();
 
 if (!areWeTestingWithJest()) {
     // Logger
     app.use(logger());
-
 }
 
 // Generic error handling middleware.
@@ -35,5 +35,8 @@ app.use(bodyParser());
 // Route Middleware
 app.use(IndexController.routes());
 app.use(IndexController.allowedMethods());
+
+app.use(UsersController.routes());
+app.use(UsersController.allowedMethods());
 
 export default app;

@@ -12,7 +12,7 @@
     "sourceMap": true,
     "paths": {
       "@app*": ["app*"],
-      "@src*": ["./*"]
+      "@src/*": ["./*"]
     },
     "types": ["jest", "node"]
   },

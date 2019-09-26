@@ -1,13 +1,9 @@
 import * as request from 'supertest';
-import server from '@src/server';
-
-afterAll(() => {
-    server.close();
-});
+import app from '@app/app';
 
 describe('Index GET / ', () => {
     it('gets correct index api response', async () => {
-        const response = await request(server).get('/');
+        const response = await request(app.callback()).get('/');
         expect(response.status).toBe(200);
         expect(response.text).toMatchSnapshot();
     });
