@@ -8,7 +8,7 @@
     "build": "tsc",
     "serve": "ts-node -r tsconfig-paths/register src/server.ts",
     "start": "nodemon",
-    "test": "jest"
+    "test": "jest -u"
   },
   "jest": {
     "moduleNameMapper": {
