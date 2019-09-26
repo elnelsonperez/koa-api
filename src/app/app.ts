@@ -1,11 +1,19 @@
 import * as Koa from 'koa';
 import * as HttpStatus from 'http-status-codes';
-import * as logger from 'koa-logger'
+import * as logger from 'koa-logger';
+import * as bodyParser from 'koa-bodyparser';
+
+// Controllers
+import IndexController from './api/modules/index/index.controller';
+import { areWeTestingWithJest } from '../helpers';
 
 const app:Koa = new Koa();
 
-// Logger
-app.use(logger());
+if (!areWeTestingWithJest()) {
+    // Logger
+    app.use(logger());
+
+}
 
 // Generic error handling middleware.
 app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
@@ -19,12 +27,13 @@ app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
     }
 });
 
-// Initial route
-app.use(async (ctx: Koa.Context) => {
-    ctx.body = 'Hello world';
-});
-
 // Application error logging.
 app.on('error', console.error);
+
+app.use(bodyParser());
+
+// Route Middleware
+app.use(IndexController.routes());
+app.use(IndexController.allowedMethods());
 
 export default app;

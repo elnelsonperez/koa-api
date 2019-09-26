@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
     "target": "ES2017",
     "module": "commonjs",
     "lib": ["es2017"],
     "outDir": "dist",
-    "rootDir": "src",
+    "rootDir": "./",
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "@app*": ["app*"]
+    },
+    "types": ["jest", "node"]
   },
   "exclude": [
     "node_modules"
