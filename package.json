@@ -12,7 +12,8 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "@app(.*)$": "<rootDir>/src/app$1"
+      "@app(.*)$": "<rootDir>/src/app$1",
+      "@src(.*)$": "<rootDir>/src$1"
     },
     "moduleFileExtensions": [
       "ts",
@@ -28,7 +29,7 @@
       }
     },
     "testMatch": [
-      "**/__tests__/*.+(ts|tsx|js)"
+      "**/__tests__/**/*.+(ts|tsx|js)"
     ]
   },
   "devDependencies": {
