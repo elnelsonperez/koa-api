@@ -1,5 +1,5 @@
-import {DbContext} from '@app/app.type';
 import {UserRepository} from '@src/database/repository/user.repository';
+import {Context} from "koa";
 
 class UsersController {
     private userRepository: UserRepository;
@@ -7,7 +7,7 @@ class UsersController {
         this.userRepository = userRepository;
     }
 
-    async getAll(ctx: DbContext) {
+    async getAll(ctx: Context) {
         let result;
 
         if (ctx.query.name) {

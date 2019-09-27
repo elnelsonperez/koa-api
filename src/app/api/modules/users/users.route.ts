@@ -1,6 +1,4 @@
 import * as Router from 'koa-joi-router';
-// import {DbContext} from '@app/app.type';
-// import {User} from '@src/database/entity/user.entity';
 import UsersController from '@app/api/modules/users/users.controller';
 import {AwilixContainer} from "awilix";
 const Joi = Router.Joi;
@@ -22,11 +20,6 @@ export default function userRouter(container: AwilixContainer) {
         handler: controller.getAll.bind(controller),
     });
 
-// router.get('/:id', async (ctx: DbContext) => {
-//     const userRepository = ctx.db.getRepository(User);
-//     const user = await userRepository.find({id: ctx.params.id});
-//     ctx.body = user;
-// });
     return router;
 }
 
