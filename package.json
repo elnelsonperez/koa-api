@@ -63,11 +63,11 @@
     "typescript": "^3.6.3",
     "webpack": "^4.41.0",
     "webpack-cli": "^3.3.9",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "inversify-binding-decorators": "^4.0.0"
   },
   "dependencies": {
     "dotenv": "^8.1.0",
-    "inversify-binding-decorators": "^4.0.0",
     "koa": "^2.8.1",
     "koa-bodyparser": "^4.2.1",
     "koa-joi-router": "^6.0.0",
