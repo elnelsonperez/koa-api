@@ -9,7 +9,7 @@ export default function indexRouter() {
         method: 'get',
         path: '/',
         handler: async (ctx: Context) => {
-            ctx.body = 'test'
+            ctx.body = 'KOA'
         },
     });
 

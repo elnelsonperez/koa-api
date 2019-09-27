@@ -2,7 +2,7 @@ import * as Koa from 'koa';
 import * as HttpStatus from 'http-status-codes';
 import * as logger from 'koa-logger';
 import * as bodyParser from 'koa-bodyparser';
-import { areWeTestingWithJest } from '../helpers';
+import { isTesting } from '../helpers';
 
 import IndexRouter from '@app/api/modules/index/index.route';
 import UsersRouter from '@app/api/modules/users/users.route';
@@ -12,7 +12,7 @@ import createContainer from "@app/core/di-container";
 export default async function App() {
     const app:Koa = new Koa();
 
-    if (!areWeTestingWithJest()) {
+    if (!isTesting()) {
         // Logger
         app.use(logger());
     }
@@ -49,7 +49,6 @@ export default async function App() {
 // Routes
     app.use(IndexRouter().middleware());
     app.use(UsersRouter(DIContainer));
-
     return app;
 }
 

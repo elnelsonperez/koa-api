@@ -1,23 +1,24 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "target": "ES2017",
+    "target": "es6",
     "module": "commonjs",
     "lib": ["es2017"],
-    "outDir": "dist",
+    "outDir": "build",
     "rootDir": "./",
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "paths": {
       "@app/*": ["app/*"],
       "@src/*": ["./*"]
     },
-    "types": ["jest", "node", "reflect-metadata"],
+    "types": ["jest", "node"],
     "moduleResolution": "node"
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "__tests__"
   ]
 }

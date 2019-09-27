@@ -1,16 +1,16 @@
 import 'reflect-metadata';
 import { createConnection, Connection, ConnectionOptions } from 'typeorm';
-import { join } from 'path';
-const parentDir = join(__dirname, '..');
+import {User} from "@src/database/entity/user.entity";
 
 const connectionOpts: ConnectionOptions = {
-    type: 'sqljs',
+    type: 'sqlite',
+    database: ':memory:',
     entities: [
-        `${parentDir}/**/*.entity.ts`,
+        User
     ],
     synchronize: true,
 };
 
-const databaseConnection:Promise<Connection> = createConnection(connectionOpts);
+const databaseConnection: Promise<Connection> = createConnection(connectionOpts);
 
 export default databaseConnection;

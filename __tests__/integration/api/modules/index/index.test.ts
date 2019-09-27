@@ -1,10 +1,11 @@
 import * as request from 'supertest';
-import app from '@app/app';
+import App from '@app/app';
 
 describe('Index GET / ', () => {
     it('gets correct index api response', async () => {
-        const response = await request(app.callback()).get('/');
+        const app = (await App()).callback();
+        const response = await request(app).get('/');
         expect(response.status).toBe(200);
-        expect(response.text).toMatchSnapshot();
+        expect(response.text).toBe('KOA');
     });
 });
