@@ -11,7 +11,7 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "paths": {
-      "@app*": ["app*"],
+      "@app/*": ["app/*"],
       "@src/*": ["./*"]
     },
     "types": ["jest", "node"]
