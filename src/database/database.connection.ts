@@ -11,6 +11,6 @@ const connectionOpts: ConnectionOptions = {
     synchronize: true,
 };
 
-const connection:Promise<Connection> = createConnection(connectionOpts);
+const databaseConnection:Promise<Connection> = createConnection(connectionOpts);
 
-export default connection;
+export default databaseConnection;

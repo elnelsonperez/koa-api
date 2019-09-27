@@ -4,45 +4,52 @@ import * as logger from 'koa-logger';
 import * as bodyParser from 'koa-bodyparser';
 import { areWeTestingWithJest } from '../helpers';
 
-// Controllers
-import IndexController from '@app/api/modules/index/index.controller';
-import UsersController from '@app/api/modules/users/users.controller';
+import IndexRouter from '@app/api/modules/index/index.route';
+import UsersRouter from '@app/api/modules/users/users.route';
 
-const app:Koa = new Koa();
+import createContainer from "@app/core/di-container";
 
-if (!areWeTestingWithJest()) {
-    // Logger
-    app.use(logger());
-}
+export default async function App() {
+    const app:Koa = new Koa();
+
+    if (!areWeTestingWithJest()) {
+        // Logger
+        app.use(logger());
+    }
 
 // Generic error handling middleware.
-app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
-    try {
-        await next();
-    } catch (error) {
-        if (error.isJoi) {
-            ctx.body = {
-                message: 'Validation Error',
-                details: error.details
-            };
-        } else {
-            ctx.body = {error}
+    app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
+        try {
+            await next();
+        } catch (error) {
+            if (error.isJoi) {
+                ctx.body = {
+                    message: 'Validation Error',
+                    details: error.details,
+                };
+            } else {
+                ctx.body = {error};
+            }
+
+            ctx.status = error.statusCode || error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+            error.status = ctx.status;
+
+            ctx.app.emit('error', error, ctx);
         }
-
-        ctx.status = error.statusCode || error.status || HttpStatus.INTERNAL_SERVER_ERROR;
-        error.status = ctx.status;
-
-        ctx.app.emit('error', error, ctx);
-    }
-});
+    });
 
 // Application error logging.
-app.on('error', console.error);
+    app.on('error', console.error);
 
-app.use(bodyParser());
+    app.use(bodyParser());
 
-// Route Middleware
-app.use(IndexController.middleware());
-app.use(UsersController.middleware());
+    const DIContainer = await createContainer();
+    app.context.container = DIContainer;
 
-export default app;
+// Routes
+    app.use(IndexRouter().middleware());
+    app.use(UsersRouter(DIContainer));
+
+    return app;
+}
+

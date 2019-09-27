@@ -11,10 +11,11 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "paths": {
-      "@app*": ["app*"],
+      "@app/*": ["app/*"],
       "@src/*": ["./*"]
     },
-    "types": ["jest", "node"]
+    "types": ["jest", "node", "reflect-metadata"],
+    "moduleResolution": "node"
   },
   "exclude": [
     "node_modules"
