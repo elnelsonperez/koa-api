@@ -11,7 +11,7 @@ router.prefix('/users');
 router.get('/', {
     validate: {
         query: {
-            name: Joi.string().optional()
+            name: Joi.string().optional().label('Name')
         }
     }
 }, async (ctx: DbContext) => {
@@ -31,7 +31,13 @@ router.get('/', {
 });
 
 
-router.get('/:id', async (ctx: DbContext) => {
+router.get('/:id', {
+    validate: {
+        params: {
+            id: Joi.number().required().label('Id')
+        }
+    }
+},async (ctx: DbContext) => {
     const userRepository = ctx.db.getRepository(User);
     const user = await userRepository.find({id: ctx.params.id});
     ctx.body = user;
