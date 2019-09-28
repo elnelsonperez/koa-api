@@ -6,6 +6,6 @@ describe('Index GET / ', () => {
         const app = (await App()).callback();
         const response = await request(app).get('/');
         expect(response.status).toBe(200);
-        expect(response.text).toBe('KOA');
+        expect(response.text).toBe('KOA API');
     });
 });

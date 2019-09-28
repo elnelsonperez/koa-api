@@ -3,13 +3,13 @@ import * as Router from 'koa-joi-router';
 
 const router = Router();
 
-export default function indexRouter() {
+export default () => {
 
     router.route({
         method: 'get',
         path: '/',
         handler: async (ctx: Context) => {
-            ctx.body = 'KOA'
+            ctx.body = 'KOA API'
         },
     });
 

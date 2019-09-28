@@ -1,6 +1,6 @@
 {
   "name": "koa-api",
-  "description": "Skeleton to build APIs based on Koa + Typescript + TypeORM + koa-joi-router + InvertfyJS + Jest",
+  "description": "Skeleton to build APIs based on Koa + Typescript + TypeORM + koa-joi-router + InvertifyJS + Jest",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",

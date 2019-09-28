@@ -9,7 +9,10 @@ dotenv.config();
 const PORT:number = Number(process.env.PORT) || 3000;
 
 CreateApplication().then(async (app) => {
+
+    // TODO This should not be here
     await usersSeeder();
+
     const server = app.listen(PORT);
 
     process.once('SIGTERM', function (code) {
