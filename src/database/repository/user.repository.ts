@@ -1,4 +1,4 @@
-import {EntityRepository, Repository, Like, getCustomRepository} from 'typeorm';
+import {EntityRepository, Repository, Like} from 'typeorm';
 import {User} from '@src/database/entity/user.entity';
 
 @EntityRepository(User)
@@ -7,5 +7,3 @@ export class UserRepository extends Repository<User> {
         return this.findAndCount({name: Like(`%${name.toLowerCase()}%`)});
     }
 }
-
-export default UserRepository;

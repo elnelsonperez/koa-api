@@ -2,23 +2,17 @@ import * as Koa from 'koa';
 import * as HttpStatus from 'http-status-codes';
 import * as logger from 'koa-logger';
 import * as bodyParser from 'koa-bodyparser';
-import { areWeTestingWithJest } from '../helpers';
+import { isTesting } from '../helpers';
 
-import {configureContainer} from "@app/core/container";
-import {scopePerRequest} from "awilix-koa";
-
-import IndexRouter from '@app/api/modules/index/index.controller';
+import IndexRouter from '@app/api/modules/index/index.route';
 import UsersRouter from '@app/api/modules/users/users.route';
+
+import createContainer from "@app/core/di-container";
 
 export default async function App() {
     const app:Koa = new Koa();
 
-    const container = await configureContainer();
-    app.context.container = container;
-
-    app.use(scopePerRequest(container));
-
-    if (!areWeTestingWithJest()) {
+    if (!isTesting()) {
         // Logger
         app.use(logger());
     }
@@ -49,10 +43,12 @@ export default async function App() {
 
     app.use(bodyParser());
 
+    const DIContainer = await createContainer();
+    app.context.container = DIContainer;
+
 // Routes
     app.use(IndexRouter().middleware());
-    app.use(UsersRouter(container).middleware());
-
+    app.use(UsersRouter(DIContainer));
     return app;
 }
 

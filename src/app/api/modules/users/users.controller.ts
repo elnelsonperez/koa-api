@@ -1,10 +1,20 @@
 import {UserRepository} from '@src/database/repository/user.repository';
 import {Context} from "koa";
+import {provide} from "inversify-binding-decorators";
+import {inject} from "inversify";
+import {Connection} from "typeorm";
+import {Controller} from "@app/core/controller";
 
-class UsersController {
+@provide(UsersController)
+class UsersController extends Controller {
+
     private userRepository: UserRepository;
-    constructor ({userRepository}: {userRepository: UserRepository}) {
-        this.userRepository = userRepository;
+
+    constructor (
+        @inject(Connection) con: Connection
+    ) {
+        super();
+        this.userRepository = con.getCustomRepository(UserRepository);
     }
 
     async getAll(ctx: Context) {

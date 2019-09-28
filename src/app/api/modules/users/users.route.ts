@@ -1,25 +1,21 @@
 import * as Router from 'koa-joi-router';
-import UsersController from '@app/api/modules/users/users.controller';
-import {AwilixContainer} from "awilix";
+import UsersController from "@app/api/modules/users/users.controller";
+import {BaseRouter} from "@app/core/base-router";
+import {Container} from "inversify";
+
 const Joi = Router.Joi;
-const router = Router();
 
-export default function userRouter(container: AwilixContainer) {
-    router.prefix('/users');
+export default (container: Container) => {
+    const router = new BaseRouter(container, UsersController, '/users');
 
-    const controller = container.resolve<UsersController>('usersController');
-
-    router.route({
-        method: 'get',
-        path: '/',
+    router.addRoute('get', '/', {
         validate: {
             query: {
                 name: Joi.string().optional(),
             },
         },
-        handler: controller.getAll.bind(controller),
-    });
+    }, 'getAll');
 
-    return router;
+    return router.middleware();
 }
 
