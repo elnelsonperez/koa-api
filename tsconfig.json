@@ -9,7 +9,7 @@
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "paths": {
       "@app/*": ["app/*"],
       "@src/*": ["./*"]
