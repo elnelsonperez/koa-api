@@ -29,7 +29,7 @@ class UsersController extends Controller {
         const [data, count] = result;
         ctx.body = {
             count,
-            users: data,
+            data,
         };
 
     }
