@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt';
 import {BAD_REQUEST, OK, UNAUTHORIZED} from "http-status-codes";
 import {omit} from 'lodash';
 import {IsNotEmpty, IsEmail, IsString} from "class-validator";
-import * as jsonwebtoken from  'jsonwebtoken';
+import {generateToken} from "@app/core/auth";
 
 class LoginBody {
     @IsNotEmpty()
@@ -43,6 +43,7 @@ export class AuthController {
             const created = await this.userRepository.save(user);
             response.body = {
                 data: omit(created, 'password'),
+                status: OK
             };
 
         } else {
@@ -76,12 +77,7 @@ export class AuthController {
             response.body = {
                 status: OK,
                 data: {
-                    token: jsonwebtoken.sign(
-                        {
-                            user: omit(user, 'password')
-                        },
-                        process.env.JWT_SECRET,
-                        { expiresIn: '1d' }),
+                    token: generateToken(user),
                 },
                 message: 'Successfully authenticated',
             };

@@ -46,10 +46,9 @@ export default async function App() {
     const DIContainer = await createContainer();
     app.context.container = DIContainer;
 
-
     useKoaServer(app, {
         controllers: [IndexController, UsersController, AuthController],
-        authorizationChecker: checkAuth,
+        authorizationChecker: async (action, roles) => checkAuth(action, roles, process.env.JWT_SECRET),
         currentUserChecker: currentUser,
         classTransformer: true,
         defaultErrorHandler: false,

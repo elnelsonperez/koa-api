@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 import { createConnection, Connection, ConnectionOptions } from 'typeorm';
 import {User} from "@src/database/entity/user.entity";
+import {isTesting} from "@src/helpers";
 
 const connectionOpts: ConnectionOptions = {
     type: 'sqlite',
-    database: ':memory:',
+    database: isTesting() ? ':memory:' : 'db',
     entities: [
         User
     ],

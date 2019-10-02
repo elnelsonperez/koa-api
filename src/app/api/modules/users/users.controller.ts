@@ -1,8 +1,8 @@
 import {UserRepository} from '@src/database/repository/user.repository';
-import {Context, Response} from "koa";
+import {Response} from "koa";
 
 import {getCustomRepository} from "typeorm";
-import {Authorized, Controller, CurrentUser, Get, JsonController, QueryParam, Res} from "routing-controllers";
+import {Authorized, CurrentUser, Get, JsonController, QueryParam, Res} from "routing-controllers";
 import {User} from "@src/database/entity/user.entity";
 
 @JsonController('/api/users')

@@ -5,7 +5,11 @@ import {getCustomRepository} from "typeorm";
 import {UserRepository} from "@src/database/repository/user.repository";
 import {User} from "@src/database/entity/user.entity";
 
-export async function checkAuth(action: Action, roles: string[]) {
+import * as jsonwebtoken from  'jsonwebtoken';
+import {omit} from  'lodash';
+
+// TODO Roles unused for now
+export async function checkAuth(action: Action, roles: string[], secret: string) {
 
     const token = resolveAuthorizationHeader(action.request);
 
@@ -14,7 +18,7 @@ export async function checkAuth(action: Action, roles: string[]) {
     }
 
     try {
-        await jwt.verify(token, process.env.JWT_SECRET);
+        await jwt.verify(token, secret);
     } catch(err) {
         return false;
     }
@@ -29,6 +33,7 @@ export async function currentUser(action: Action) {
     if (!token) {
         return null;
     }
+
     try {
         const data = await jwt.verify(token, process.env.JWT_SECRET) as {user: User};
         const userRepo = getCustomRepository(UserRepository);
@@ -39,10 +44,9 @@ export async function currentUser(action: Action) {
 
 }
 
-
-function resolveAuthorizationHeader(ctx: any) {
+export function resolveAuthorizationHeader(ctx: any) {
     if (!ctx.header || !ctx.header.authorization) {
-        return;
+        return null;
     }
 
     const parts = ctx.header.authorization.split(' ');
@@ -55,4 +59,15 @@ function resolveAuthorizationHeader(ctx: any) {
             return credentials;
         }
     }
+
+    return null;
+}
+
+export function generateToken(user: User, expires: string = '1d', secret: string = 'default') {
+    return jsonwebtoken.sign(
+        {
+            user: omit(user, 'password')
+        },
+        secret,
+        { expiresIn: expires })
 }
