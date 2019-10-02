@@ -11,7 +11,7 @@ import {IndexController} from "@app/api/modules/index/index.controller";
 import {UsersController} from "@app/api/modules/users/users.controller";
 import {AuthController} from "@app/api/modules/auth/auth.controller";
 
-import databaseConnection from "@src/database/database.connection";
+import initializeDatabaseConnection from "@src/database/database.connection";
 import {Container} from "typedi";
 
 export default async function App() {
@@ -42,7 +42,7 @@ export default async function App() {
     app.use(bodyParser());
 
     //TODO Revise this
-    await databaseConnection;
+    await initializeDatabaseConnection;
 
     useContainer(Container);
 
