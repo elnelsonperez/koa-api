@@ -1,38 +1,41 @@
 import {UserRepository} from '@src/database/repository/user.repository';
-import {Context} from "koa";
-import {provide} from "inversify-binding-decorators";
-import {inject} from "inversify";
-import {Connection} from "typeorm";
-import {Controller} from "@app/core/controller";
+import {Context, Response} from "koa";
 
-@provide(UsersController)
-class UsersController extends Controller {
+import {getCustomRepository} from "typeorm";
+import {Authorized, Controller, CurrentUser, Get, JsonController, QueryParam, Res} from "routing-controllers";
+import {User} from "@src/database/entity/user.entity";
+
+@JsonController('/api/users')
+export default class UsersController {
 
     private userRepository: UserRepository;
 
-    constructor (
-        @inject(Connection) con: Connection
-    ) {
-        super();
-        this.userRepository = con.getCustomRepository(UserRepository);
+    constructor () {
+        this.userRepository = getCustomRepository(UserRepository);
     }
 
-    async getAll(ctx: Context) {
-        let result;
+    @Authorized()
+    @Get('/')
+    async getAll(
+        @Res() response: Response,
+        @QueryParam('name') name: string,
+        @CurrentUser() user?: User,
+    ) {
 
-        if (ctx.query.name) {
-            result = await this.userRepository.findByNameAndCount(ctx.query.name);
+        let result;
+        if (name) {
+            result = await this.userRepository.findByNameAndCount(name);
         } else {
             result = await this.userRepository.findAndCount();
         }
 
         const [data, count] = result;
-        ctx.body = {
+        response.body = {
             count,
             data,
+            user
         };
 
+        return response;
     }
 }
-
-export default UsersController;

@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import CreateApplication from '@app/app';
 import { isTesting } from './helpers';
-import usersSeeder from '@src/database/seeders/users.seeder';
 
 import * as dotenv from 'dotenv'
 dotenv.config();
@@ -9,8 +8,6 @@ dotenv.config();
 const PORT:number = Number(process.env.PORT) || 3000;
 
 CreateApplication().then(async (app) => {
-    // TODO this should not be here
-    await usersSeeder();
 
     const server = app.listen(PORT);
 
