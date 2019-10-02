@@ -6,6 +6,7 @@ import {UserRepository} from "@src/database/repository/user.repository";
 import {User} from "@src/database/entity/user.entity";
 
 import * as jsonwebtoken from  'jsonwebtoken';
+
 import {omit} from  'lodash';
 
 // TODO Roles unused for now

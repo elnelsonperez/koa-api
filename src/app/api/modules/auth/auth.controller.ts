@@ -1,13 +1,13 @@
+import * as bcrypt from 'bcrypt';
 import {Body, JsonController, Post, Req, Res} from "routing-controllers";
 import {UserRepository} from "@src/database/repository/user.repository";
-import {getCustomRepository} from "typeorm";
 import {Request, Response} from "koa";
 import {User} from "@src/database/entity/user.entity";
-import * as bcrypt from 'bcrypt';
 import {BAD_REQUEST, OK, UNAUTHORIZED} from "http-status-codes";
-import {omit} from 'lodash';
 import {IsNotEmpty, IsEmail, IsString} from "class-validator";
 import {generateToken} from "@app/core/auth";
+import UserService from "@app/services/user.service";
+import {classToPlain} from "class-transformer";
 
 class LoginBody {
     @IsNotEmpty()
@@ -22,11 +22,10 @@ class LoginBody {
 
 @JsonController('/api/auth')
 export class AuthController {
-    private userRepository: UserRepository;
-
-    constructor () {
-        this.userRepository = getCustomRepository(UserRepository);
-    }
+    constructor (
+        private userService: UserService,
+        private userRepository: UserRepository
+    ) {}
 
     @Post('/register')
     async register(
@@ -36,13 +35,9 @@ export class AuthController {
 
         const existingUser = await this.userRepository.findByEmail(body.email);
         if (!existingUser) {
-            const user = new User();
-            user.email = body.email;
-            user.password = await bcrypt.hash(body.password, 5);
-            user.name = body.name;
-            const created = await this.userRepository.save(user);
+            const user =  await this.userService.createUser(body.name, body.email, body.password);
             response.body = {
-                data: omit(created, 'password'),
+                data: classToPlain(user),
                 status: OK
             };
 

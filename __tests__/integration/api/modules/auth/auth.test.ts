@@ -1,8 +1,7 @@
 import * as request from 'supertest';
 import App from '@app/app';
-import {getManager} from "typeorm";
-import {User} from "@src/database/entity/user.entity";
-import * as bcrypt from 'bcrypt'
+import {Container} from "typedi";
+import UserService from "@app/services/user.service";
 
 describe('Auth Controller ', () => {
 
@@ -23,17 +22,13 @@ describe('Auth Controller ', () => {
     });
 
     it('can login', async () => {
-        const user = new User();
-        user.name = 'Test';
-        user.email = 'me@nelsonperez.net';
-        user.password = await bcrypt.hash('123456', 5);
-        await getManager().save<User>(user);
-
         const app = (await App()).callback();
+        const service = Container.get(UserService);
+        const user = await service.createUser('Test', 'test@test.net', '123456');
 
         const response = await request(app)
             .post('/api/auth/login')
-            .send({email: 'me@nelson.net', password: '123456'})
+            .send({email: user.email, password: '123456'})
             .expect(200);
 
         expect(Object.keys(response.body.data)).toContain('token')

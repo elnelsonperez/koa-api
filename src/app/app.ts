@@ -4,13 +4,15 @@ import * as bodyParser from 'koa-bodyparser';
 import { isTesting } from '../helpers';
 import errorHandler from '@app/core/error-handler';
 
-import createContainer from "@app/core/di-container";
-import {Action, useKoaServer} from "routing-controllers";
+import {useContainer, useKoaServer} from "routing-controllers";
 
 import {checkAuth, currentUser} from "@app/core/auth";
-import IndexController from "@app/api/modules/index/index.controller";
-import UsersController from "@app/api/modules/users/users.controller";
+import {IndexController} from "@app/api/modules/index/index.controller";
+import {UsersController} from "@app/api/modules/users/users.controller";
 import {AuthController} from "@app/api/modules/auth/auth.controller";
+
+import databaseConnection from "@src/database/database.connection";
+import {Container} from "typedi";
 
 export default async function App() {
     const app:Koa = new Koa();
@@ -20,7 +22,7 @@ export default async function App() {
         app.use(logger());
     }
 
-// Generic error handling middleware.
+    // Error handling middleware.
     app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
         try {
             await next();
@@ -37,24 +39,28 @@ export default async function App() {
         ctx.set('X-Response-Time', `${ms}ms`);
     });
 
-
-// Application error logging.
-    app.on('error', console.error);
-
     app.use(bodyParser());
 
-    const DIContainer = await createContainer();
-    app.context.container = DIContainer;
+    //TODO Revise this
+    await databaseConnection;
+
+    useContainer(Container);
 
     useKoaServer(app, {
-        controllers: [IndexController, UsersController, AuthController],
+        controllers: [
+            IndexController,
+            AuthController,
+            UsersController,
+            ],
         authorizationChecker: async (action, roles) => checkAuth(action, roles, process.env.JWT_SECRET),
         currentUserChecker: currentUser,
         classTransformer: true,
+        validation: true,
         defaultErrorHandler: false,
-        validation: true
     });
 
+    // Application error logging.
+    app.on('error', console.error);
     return app;
 }
 

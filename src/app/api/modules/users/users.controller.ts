@@ -6,7 +6,7 @@ import {Authorized, CurrentUser, Get, JsonController, QueryParam, Res} from "rou
 import {User} from "@src/database/entity/user.entity";
 
 @JsonController('/api/users')
-export default class UsersController {
+export class UsersController {
 
     private userRepository: UserRepository;
 
