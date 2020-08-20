@@ -67,7 +67,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "class-transformer": "^0.2.3",
     "dotenv": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
